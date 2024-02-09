@@ -1,8 +1,9 @@
-all: hello clean
+all: hello
 
 hello:
-	echo "Launching server..."
 	gcc server.c -o server 
+	./server
+	echo "\n";
 
 clean:
 	echo "Cleaning up..."
