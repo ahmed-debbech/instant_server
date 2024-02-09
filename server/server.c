@@ -45,14 +45,23 @@ void remove_spaces(char* s) {
 }
 char **  get_parts_by_space(char * s){
     char *token;
-    token = strtok(s, " ");
-    char ** devids;
-    int i = 0; 
+    char * m;
+    strcpy(m, s);
+    token = strtok(m, " ");
+
+    size_t i = 1; 
+    char ** devids = NULL;
+    devids = malloc(sizeof(char **)*i);
+    strcpy(devids[0], token);
+    ///////////////////////////////////////////////////////////////// STOPEDD HERE
     while( token != NULL ) {
-        printf( "%s\n", token);
+        printf("1\n");
         token = strtok(NULL, " ");
-        devids = realloc(devids, sizeof(char *));
-        devids[i] = token;
+        printf("2\n");
+        devids = realloc(devids, sizeof(char *)*i);
+        printf("3\n");
+        strcpy(devids[0], token);
+        printf( "%s\n", devids[i-1]);
         i++;
     }
     return devids;
