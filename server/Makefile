@@ -1,7 +1,7 @@
 all: hello
 
 hello:
-	gcc server.c -o server 
+	gcc server.c utils.c -o server 
 	./server
 	echo "\n";
 
