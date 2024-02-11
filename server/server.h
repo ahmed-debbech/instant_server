@@ -8,7 +8,7 @@
 #include <unistd.h> // read(), write(), close()
 
 #define MAX_BUFF_CLIENT 100000
-#define MAX 900
+#define MAX 100000
 //#define PORT 9888
 #define NUM_CNX 5
 #define SA struct sockaddr 
@@ -27,6 +27,7 @@ struct HttpReq{
 
     char *method;
     char *path;
+    char *protocol;
 
     struct Header headers[50];
     int len_header;

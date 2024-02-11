@@ -2,7 +2,7 @@
 #include "utils.h"
 
 
-struct HttpReq http_parser(char * buff){
+struct HttpReq http_request_parser(char * buff){
 
     printf("buffer: \n[%s]\n\n", buff);
     struct HttpReq request;
@@ -13,6 +13,7 @@ struct HttpReq http_parser(char * buff){
     int BODY_START = size-1;
     int counter = 0;
     request.len_header = 0;
+
     for(counter = 0; counter <= size-1; counter++){
         
         if(counter == TOP_LINE){ //first line of raw http request parsing
@@ -26,13 +27,17 @@ struct HttpReq http_parser(char * buff){
             }
             int s;
             char ** parts = get_token(tokens[counter], ' ', &s);
-            request.path = malloc(sizeof(char) * 50);
+            request.path = malloc(sizeof(char) * strlen(parts[1]));
+            request.protocol = malloc(sizeof(char) * strlen(parts[2]));
             strcpy(request.path, parts[1]);
+            strcpy(request.protocol, parts[2]);
         }
+
         if(counter == BODY_START){
             request.body = malloc(sizeof(char) * strlen(tokens[counter]));
             request.body = tokens[counter];
         }
+
         if((counter != TOP_LINE) && (counter != BODY_START)){ //it is a header
             int s;
             char ** parts = get_token(trimer(tokens[counter]), ':', &s);
@@ -62,28 +67,22 @@ struct HttpReq http_parser(char * buff){
     return request;
 }
 
-void handle(char * buff){
+char * handle(char * buff){
     printf("handle\n");
-    struct HttpReq req = http_parser(buff);
-    printf("%s %s %s %s %s %d\n",
-    req.path,
-    req.method,
-    req.headers[5].key,
-    req.headers[5].value,
-    req.body,
-    req.len_header
-    );
+    struct HttpReq req = http_request_parser(buff);
+    //struct HttpRes res = http_response_constructor();
+    return NULL;
 }
 
-void start_server(int sockfd){
+void run_server(int sockfd){
     
     struct Sessions sess;
     sess.length = 0;
 
     while(1){
         int connfd = accept(sockfd, 0,0); 
-        sess.arr[sess.length] = connfd;
-        sess.length++;
+        //sess.arr[sess.length] = connfd;
+        //sess.length++;
 
         if (connfd < 0) { 
             printf("server could not accept session with index %d\n", sess.length); 
@@ -93,9 +92,19 @@ void start_server(int sockfd){
         char buff[MAX_BUFF_CLIENT];
         memset(buff,'\0', sizeof(buff));
 
-        ssize_t read_size = read(connfd, buff, MAX_BUFF_CLIENT); 
-        printf("read size: %ld\n", read_size);
+        ssize_t read_size = read(connfd, buff, MAX_BUFF_CLIENT);
+
+        char serv_buff[MAX];
+        memset(serv_buff,'\0', sizeof(serv_buff));
+
         handle(buff);
+        //strcpy(serv_buff, "HTTP/1.1 200 OK\nDate: Mon, 27 Jul 2009 12:28:53 GMT\nContent-Length: 88\nContent-Type: text/html\n\n<html></html>");
+        strcpy(serv_buff ,
+        "HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\n{eeeee"
+        );
+        printf("res: [%s]\n", serv_buff);
+        send(connfd, serv_buff, strlen(serv_buff), 0);
+        close(connfd);
     }
 }
 int * get_port(){
@@ -136,7 +145,7 @@ int main(){
     }
 
     printf("Server listening on port %d\n", PORT);
-    start_server(sockfd);
+    run_server(sockfd);
 
     // After chatting close the socket 
     close(sockfd); 
