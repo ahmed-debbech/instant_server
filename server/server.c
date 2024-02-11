@@ -94,10 +94,10 @@ void run_server(int sockfd){
 
         ssize_t read_size = read(connfd, buff, MAX_BUFF_CLIENT);
 
+        handle(buff);
+
         char serv_buff[MAX];
         memset(serv_buff,'\0', sizeof(serv_buff));
-
-        handle(buff);
         //strcpy(serv_buff, "HTTP/1.1 200 OK\nDate: Mon, 27 Jul 2009 12:28:53 GMT\nContent-Length: 88\nContent-Type: text/html\n\n<html></html>");
         strcpy(serv_buff ,
         "HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\n{eeeee"

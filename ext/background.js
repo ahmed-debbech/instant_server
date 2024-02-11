@@ -2,7 +2,7 @@ chrome.runtime.onInstalled.addListener(() => {
   console.log('the extension is installed successfully');
 });
 
-/*setInterval(() => {
+setInterval(() => {
   console.log('calling...');
   fetch('http://localhost:9880/')
   .then((res) => {res.text().then((data) => {
@@ -18,9 +18,9 @@ chrome.runtime.onInstalled.addListener(() => {
     });
   })})
   .catch((err) => {console.log("could not connect to host")})
-}, 1000);*/
+}, 1000);
 
-chrome.tabs.onActivated.addListener(function(info){
+/*chrome.tabs.onActivated.addListener(function(info){
   chrome.tabs.get(info.tabId, function(change){
     setInterval(() => {
       console.log('calling...');
@@ -38,4 +38,4 @@ chrome.tabs.onActivated.addListener(function(info){
       .catch((err) => {console.log("could not connect to host")})
     }, 1000);
   });
-});
+});*/
