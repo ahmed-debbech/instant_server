@@ -1,6 +1,6 @@
 #include "server.h"
 #include "utils.h"
-
+#include "store.h"
 
 struct HttpReq http_request_parser(char * buff){
 
@@ -71,6 +71,21 @@ char * handle(char * buff){
     printf("handle\n");
     struct HttpReq req = http_request_parser(buff);
     //struct HttpRes res = http_response_constructor();
+
+    char * f;
+    char * s = malloc(sizeof(char) * 30);
+    if(strncmp(req.path, "/seen", 5) == 0){
+       delete();
+    }
+    if(strncmp(req.path, "/", 1) == 0){
+        if(strncmp(req.method, "GET", 3) == 0){
+            f = get();
+        }else{
+           store(req.body);
+           return
+        }
+    }
+
     return NULL;
 }
 
@@ -94,16 +109,19 @@ void run_server(int sockfd){
 
         ssize_t read_size = read(connfd, buff, MAX_BUFF_CLIENT);
 
-        handle(buff);
-
         char serv_buff[MAX];
         memset(serv_buff,'\0', sizeof(serv_buff));
-        //strcpy(serv_buff, "HTTP/1.1 200 OK\nDate: Mon, 27 Jul 2009 12:28:53 GMT\nContent-Length: 88\nContent-Type: text/html\n\n<html></html>");
+        char * serv = handle(buff);
+
         strcpy(serv_buff ,
-        "HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\n{eeeee"
+        "HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\n"
         );
+        strcpy(serv_buff ,serv);
+
         printf("res: [%s]\n", serv_buff);
         send(connfd, serv_buff, strlen(serv_buff), 0);
+
+        free(serv);
         close(connfd);
     }
 }

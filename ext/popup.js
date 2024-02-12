@@ -20,9 +20,31 @@ function onTestChange() {
     }
    
 }
+function storeIp(){
+    let v = document.getElementById("ip-val").value;
+    localStorage.setItem("pip", v)
+}
+function getIp(){
+    let x = localStorage.getItem("pip")
+    if(x){
+        document.getElementById("ip-val").value = x;
+        return x
+    }
+    return null;
+}
 document.getElementById("aa").addEventListener('click', () => {
-    send()
+    //send()
+    storeIp()
 })
-document.getElementById("paste").addEventListener('onkeypress', () => {
-    onTestChange()
+function refresh(){
+    getIp()
+    chrome.action.setIcon({
+        path: {
+          16: "images.png",
+          32: "images.png"
+        },
+      });
+}
+document.getElementById("in-msg").addEventListener('click', () => {
+    refresh()
 })

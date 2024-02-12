@@ -10,17 +10,19 @@
         "matches": ["http://*/*"],
         "js": ["script.js"]
     }],
-    "action" : {
-        "default_popup" : "popup.html"
-    },
     "host_permissions": [
         "http://*/*",
         "https://*/*"
     ],
-    "browser_action": {
+    "action": {
         "default_icon": {
             "16": "images.png"
-        }
+        },
+        "default_title": "Click Me",
+        "default_popup": "popup.html" 
+    },
+    "icons": {
+        "16": "images.png"
     },
     "permissions": ["webRequest"]
 }

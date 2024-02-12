@@ -11,14 +11,20 @@ setInterval(() => {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       console.log(tabs)
       if(tabs.length > 0){
-        chrome.tabs.sendMessage(tabs[0].id, { message: "myMessage" }, (res) => {
-          console.log("tab response: ", res)
-        });
+        if(data.length > 0){
+          chrome.action.setIcon({
+            path: {
+              16: "notif.png",
+              32: "notif.png"
+            },
+          });
+        }
       }
     });
   })})
   .catch((err) => {console.log("could not connect to host")})
 }, 1000);
+
 
 /*chrome.tabs.onActivated.addListener(function(info){
   chrome.tabs.get(info.tabId, function(change){

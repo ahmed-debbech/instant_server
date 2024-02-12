@@ -11,13 +11,13 @@
                 width: 30px;
             }
             #aa{
-                position: fixed;
                 right: 10px;
                 bottom: 5px;
                 background-color: rgb(27, 119, 27);
             }
             #msg-back{
                 background-color: rgb(27, 119, 27);
+                padding: 5%;
             }
 
         </style>
@@ -25,14 +25,19 @@
     <body style="background-color: rgb(200, 255, 200);">
         <div id="ip"> <h4 >192.168.1.</h4></div>
         <div  id="fld-ip"> <input id="ip-val" type="text"></div>
-        <div id="msg-back">
+        <div hidden id="msg-back">
+            <a>hello</a>
+        </div>
+        <div  id="msg-back-y">
             <a>You: hello</a>
         </div>
         <br>
         <textarea id="in-msg"></textarea>
+        <br>
         <button id="aa">>>></button>
 
 
         <script defer type="text/javascript" src="popup.js"></script>
+
     </body>
 </html>
