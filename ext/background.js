@@ -4,7 +4,7 @@ chrome.runtime.onInstalled.addListener(() => {
 setInterval(() => {
   console.log('calling...');
   chrome.storage.local.get(["pip"], (d) =>{
-    console.log(d)
+    console.log(JSON.stringify(d))
     fetch("http://192.168.1."+r+":9880")
     .then((res) => {res.text().then((data) => {
       console.log("successful!")

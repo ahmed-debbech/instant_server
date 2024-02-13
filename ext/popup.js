@@ -17,11 +17,13 @@ function onTestChange() {
 }
 function storeIp(){
     let v = document.getElementById("ip-val").value;
-    localStorage.setItem("pip", v)
+    //localStorage.setItem("pip", v)
+    chrome.storage.local.set({"pip": v}, (d) =>{})
 }
-function getIp(){
-    let x = localStorage.getItem("pip")
+async function getIp(){
+    let x = await chrome.storage.local.get(["pip"])
     if(x){
+        console.log(x)
         document.getElementById("ip-val").value = x;
         return x
     }
@@ -38,7 +40,7 @@ function refresh(){
           16: "images.png",
           32: "images.png"
         },
-      });
+    });
 }
 document.getElementById("in-msg").addEventListener('click', () => {
     refresh()
