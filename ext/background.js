@@ -1,28 +1,30 @@
 chrome.runtime.onInstalled.addListener(() => {
   console.log('the extension is installed successfully');
 });
-
 setInterval(() => {
   console.log('calling...');
-  fetch('http://localhost:9880/')
-  .then((res) => {res.text().then((data) => {
-    console.log("successful!")
-    
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      console.log(tabs)
-      if(tabs.length > 0){
-        if(data.length > 0){
-          chrome.action.setIcon({
-            path: {
-              16: "notif.png",
-              32: "notif.png"
-            },
-          });
+  chrome.storage.local.get(["pip"], (d) =>{
+    console.log(d)
+    fetch("http://192.168.1."+r+":9880")
+    .then((res) => {res.text().then((data) => {
+      console.log("successful!")
+      
+      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        console.log(tabs)
+        if(tabs.length > 0){
+          if(data != "nothing"){
+            chrome.action.setIcon({
+              path: {
+                16: "notif.png",
+                32: "notif.png"
+              },
+            });
+          }
         }
-      }
-    });
-  })})
-  .catch((err) => {console.log("could not connect to host")})
+      });
+    })})
+    .catch((err) => {console.log("could not connect to host")})
+  })
 }, 1000);
 
 

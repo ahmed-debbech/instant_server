@@ -1,15 +1,10 @@
-function send(){
-    let v = document.getElementById("paste").value;
+async function send(){
+    let v = document.getElementById("in-msg").value;
     alert(v)
-    fetch('http://57.129.15.180:3000/copy', {
-        method: 'POST',
-        body: JSON.stringify({
-            text: v
-        }),
-        headers : {
-            "Content-Type" : "application/json"
-        }
-      })
+    await fetch("http://192.168.1."+getIp()+":9880", {
+        method: "POST",
+        body: JSON.stringify(v),
+    });
 }
 function onTestChange() {
     var key = window.event.keyCode;
@@ -33,7 +28,7 @@ function getIp(){
     return null;
 }
 document.getElementById("aa").addEventListener('click', () => {
-    //send()
+    send()
     storeIp()
 })
 function refresh(){ 
