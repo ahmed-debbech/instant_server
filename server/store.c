@@ -12,6 +12,7 @@ int store(char * s){
         return -1;
     }
     fprintf(fptr, "%s", s);
+    fclose(fptr);
     return 0;
 }
 int delete(){
@@ -25,6 +26,9 @@ int delete(){
         printf("The file is not opened. The program will now exit.");
         return -1;
     }
+    char * s ="";
+    fprintf(fptr, "%s",s);
+    fclose(fptr);
     return 0;
 }
 char * get(){
@@ -36,9 +40,10 @@ char * get(){
     // checking if the file is opened successfully
     if (fptr == NULL) {
         printf("The file is not opened. The program will now exit.");
-        return NULL;
+        return "";
     }
-    char * s;
+    char * s = malloc(sizeof(char) * 1024);
     fscanf(fptr, "%s", s);
-    return 0;
+    fclose(fptr);
+    return s;
 }

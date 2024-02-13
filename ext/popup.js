@@ -36,7 +36,7 @@ document.getElementById("aa").addEventListener('click', () => {
     //send()
     storeIp()
 })
-function refresh(){
+function refresh(){ 
     getIp()
     chrome.action.setIcon({
         path: {

@@ -34,8 +34,12 @@ struct HttpReq http_request_parser(char * buff){
         }
 
         if(counter == BODY_START){
-            request.body = malloc(sizeof(char) * strlen(tokens[counter]));
-            request.body = tokens[counter];
+            if(strcmp("", tokens[counter]) !=0){
+                request.body = malloc(sizeof(char) * strlen(tokens[counter]));
+                request.body = tokens[counter];
+            }else{
+                request.body = "";
+            }
         }
 
         if((counter != TOP_LINE) && (counter != BODY_START)){ //it is a header
@@ -68,25 +72,25 @@ struct HttpReq http_request_parser(char * buff){
 }
 
 char * handle(char * buff){
-    printf("handle\n");
     struct HttpReq req = http_request_parser(buff);
     //struct HttpRes res = http_response_constructor();
-
+    
     char * f;
     char * s = malloc(sizeof(char) * 30);
     if(strncmp(req.path, "/seen", 5) == 0){
        delete();
     }
-    if(strncmp(req.path, "/", 1) == 0){
+    if(strcmp(req.path, "/") == 0){
         if(strncmp(req.method, "GET", 3) == 0){
             f = get();
+            return f;
         }else{
            store(req.body);
-           return
         }
     }
-
-    return NULL;
+    f = malloc(sizeof(char)* 2);
+    f[0] = '0'; f[1] = '\n';
+    return f;
 }
 
 void run_server(int sockfd){
@@ -111,12 +115,13 @@ void run_server(int sockfd){
 
         char serv_buff[MAX];
         memset(serv_buff,'\0', sizeof(serv_buff));
+
         char * serv = handle(buff);
 
         strcpy(serv_buff ,
         "HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\n"
         );
-        strcpy(serv_buff ,serv);
+        strcat(serv_buff ,serv);
 
         printf("res: [%s]\n", serv_buff);
         send(connfd, serv_buff, strlen(serv_buff), 0);
