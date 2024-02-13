@@ -16,19 +16,10 @@ int store(char * s){
     return 0;
 }
 int delete(){
-    FILE* fptr;
  
     // opening the file in read mode
-    fptr = fopen("msg", "w");
- 
-    // checking if the file is opened successfully
-    if (fptr == NULL) {
-        printf("The file is not opened. The program will now exit.");
-        return -1;
-    }
-    char * s ="";
-    fprintf(fptr, "%s",s);
-    fclose(fptr);
+    remove("msg");
+
     return 0;
 }
 char * get(){
@@ -40,7 +31,7 @@ char * get(){
     // checking if the file is opened successfully
     if (fptr == NULL) {
         printf("The file is not opened. The program will now exit.");
-        return "";
+        return NULL;
     }
     char * s = malloc(sizeof(char) * 1024);
     fscanf(fptr, "%s", s);

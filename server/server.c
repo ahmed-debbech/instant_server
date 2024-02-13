@@ -118,10 +118,16 @@ void run_server(int sockfd){
 
         char * serv = handle(buff);
 
-        strcpy(serv_buff ,
-        "HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\n"
-        );
-        strcat(serv_buff ,serv);
+        if(serv == NULL){
+            strcpy(serv_buff ,
+            "HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\nnothing"
+            );
+        }else{
+            strcpy(serv_buff ,
+            "HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\n"
+            );
+            strcat(serv_buff ,serv);
+        }
 
         printf("res: [%s]\n", serv_buff);
         send(connfd, serv_buff, strlen(serv_buff), 0);
