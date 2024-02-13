@@ -3,5 +3,4 @@
 
 
 int store(char * s);
-int delete();
 char * get();

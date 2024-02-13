@@ -15,13 +15,6 @@ int store(char * s){
     fclose(fptr);
     return 0;
 }
-int delete(){
- 
-    // opening the file in read mode
-    remove("msg");
-
-    return 0;
-}
 char * get(){
     FILE* fptr;
  

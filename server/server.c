@@ -77,9 +77,6 @@ char * handle(char * buff){
     
     char * f;
     char * s = malloc(sizeof(char) * 30);
-    if(strncmp(req.path, "/seen", 5) == 0){
-       delete();
-    }
     if(strcmp(req.path, "/") == 0){
         if(strncmp(req.method, "GET", 3) == 0){
             f = get();
