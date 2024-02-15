@@ -1,46 +1,46 @@
-async function send(){
+function send(){
     let v = document.getElementById("in-msg").value;
+    if(v == "") return;
     alert(v)
-    await fetch("http://192.168.1."+getIp()+":9880", {
-        method: "POST",
-        body: JSON.stringify(v),
-    });
+    chrome.storage.local.get(["pip"], async (d) =>{
+        await fetch("http://192.168.1."+d.pip+":9880", {
+            method: "POST",
+            body: v,
+        });
+        document.getElementById("msg").value = v;
+    })
 }
-function onTestChange() {
-    var key = window.event.keyCode;
 
-    // If the user has pressed enter
-    if (key == 13) {
-        send()
-    }
-   
-}
 function storeIp(){
     let v = document.getElementById("ip-val").value;
     //localStorage.setItem("pip", v)
     chrome.storage.local.set({"pip": v}, (d) =>{})
 }
-async function getIp(){
-    let x = await chrome.storage.local.get(["pip"])
-    if(x){
-        console.log(x)
-        document.getElementById("ip-val").value = x;
-        return x
-    }
-    return null;
-}
+
 document.getElementById("aa").addEventListener('click', () => {
-    send()
     storeIp()
+    send()
 })
+
+let ipps
 function refresh(){ 
-    getIp()
-    chrome.action.setIcon({
-        path: {
-          16: "images.png",
-          32: "images.png"
-        },
-    });
+    storeIp()
+
+    chrome.storage.local.get(["pip"], (d) =>{
+
+        chrome.storage.local.get((["seend"]), (da) =>{
+            document.getElementById("msg").value = da.seend
+            chrome.storage.local.set({"seend": da.seend}, (d) =>{})
+            ipps = d.pip;
+            document.getElementById("ip-val").value = ipps; 
+            chrome.action.setIcon({
+                path: {
+                16: "images.png",
+                32: "images.png"
+                },
+            });
+        });
+    })
 }
 document.getElementById("in-msg").addEventListener('click', () => {
     refresh()

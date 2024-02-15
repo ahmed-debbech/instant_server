@@ -46,6 +46,7 @@ struct HttpReq http_request_parser(char * buff){
             int s;
             char ** parts = get_token(trimer(tokens[counter]), ':', &s);
             if(s > 1 ){
+                if(strcmp(parts[0], "Origin") == 0) continue;
                 request.headers[request.len_header].key = malloc(sizeof(char) * strlen(parts[0]));
                 if(s > 2){
                     char * full_value = malloc(sizeof(char));
@@ -54,6 +55,9 @@ struct HttpReq http_request_parser(char * buff){
                         strcat(full_value, parts[g]);
                         if(g != s-1) //not the end yet!
                         strcat(full_value, ":");
+                        else{
+                            strcat(full_value, "\n");
+                        }
                     }
                     request.headers[request.len_header].value = malloc(sizeof(char) * strlen(full_value));
                     request.headers[request.len_header].key = parts[0];
@@ -74,7 +78,7 @@ struct HttpReq http_request_parser(char * buff){
 char * handle(char * buff){
     struct HttpReq req = http_request_parser(buff);
     //struct HttpRes res = http_response_constructor();
-    
+    printf("end parsing \n");
     char * f;
     char * s = malloc(sizeof(char) * 30);
     if(strcmp(req.path, "/") == 0){
