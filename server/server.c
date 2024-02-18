@@ -4,7 +4,7 @@
 
 struct HttpReq http_request_parser(char * buff){
 
-    printf("buffer: \n[%s]\n\n", buff);
+    printf("*****rawrequest: \n[%s]\n*******", buff);
     struct HttpReq request;
 
     int size;
@@ -29,8 +29,8 @@ struct HttpReq http_request_parser(char * buff){
             char ** parts = get_token(tokens[counter], ' ', &s);
             request.path = malloc(sizeof(char) * strlen(parts[1]));
             request.protocol = malloc(sizeof(char) * strlen(parts[2]));
-            strcpy(request.path, parts[1]);
-            strcpy(request.protocol, parts[2]);
+            request.path = parts[1];
+            request.protocol=  parts[2];
         }
 
         if(counter == BODY_START){
@@ -38,7 +38,8 @@ struct HttpReq http_request_parser(char * buff){
                 request.body = malloc(sizeof(char) * strlen(tokens[counter]));
                 request.body = tokens[counter];
             }else{
-                request.body = "";
+                request.body = malloc(sizeof(char));
+                request.body[0] = 'x';
             }
         }
 
@@ -54,7 +55,7 @@ struct HttpReq http_request_parser(char * buff){
                         full_value = realloc(full_value, sizeof(char) * (strlen(parts[g])+1));
                         strcat(full_value, parts[g]);
                         if(g != s-1) //not the end yet!
-                        strcat(full_value, ":");
+                            strcat(full_value, ":");
                         else{
                             strcat(full_value, "\n");
                         }
@@ -75,29 +76,38 @@ struct HttpReq http_request_parser(char * buff){
     return request;
 }
 
+void free_req(struct HttpReq req){
+    //free mem
+    free(req.method);
+    free(req.path);
+    free(req.protocol);
+    free(req.body);
+    for(int i=0;i<=req.len_header-1; i++){
+        free(req.headers[i].key);
+        free(req.headers[i].value);
+    }
+}
 char * handle(char * buff){
     struct HttpReq req = http_request_parser(buff);
     //struct HttpRes res = http_response_constructor();
     printf("end parsing \n");
     char * f;
-    char * s = malloc(sizeof(char) * 30);
-    if(strcmp(req.path, "/") == 0){
+    if(strncmp(req.path, "/", 1) == 0){
         if(strncmp(req.method, "GET", 3) == 0){
             f = get();
+            free_req(req);
             return f;
         }else{
            store(req.body);
         }
     }
+    free_req(req);
     f = malloc(sizeof(char)* 2);
     f[0] = '0'; f[1] = '\n';
     return f;
 }
 
 void run_server(int sockfd){
-    
-    struct Sessions sess;
-    sess.length = 0;
 
     while(1){
         int connfd = accept(sockfd, 0,0); 
@@ -105,7 +115,7 @@ void run_server(int sockfd){
         //sess.length++;
 
         if (connfd < 0) { 
-            printf("server could not accept session with index %d\n", sess.length); 
+            printf("server could not accept request\n"); 
             return ;
         }
 
@@ -130,7 +140,7 @@ void run_server(int sockfd){
             strcat(serv_buff ,serv);
         }
 
-        printf("res: [%s]\n", serv_buff);
+        //printf("res: [%s]\n", serv_buff);
         send(connfd, serv_buff, strlen(serv_buff), 0);
 
         free(serv);
@@ -177,6 +187,7 @@ int main(){
     printf("Server listening on port %d\n", PORT);
     run_server(sockfd);
 
+    free(d);
     // After chatting close the socket 
     close(sockfd); 
     return 0;

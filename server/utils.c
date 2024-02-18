@@ -1,6 +1,13 @@
 #include "utils.h"
 
 
+void freer(char ** toks, int s){
+    for(int i=0; i<=s-1; i++){
+        free(toks[i]);
+    }
+    free(toks);
+}
+
 char ** get_token(char * buff, char tok, int * final_size){
     //FILE *fptr;
     //fptr = fopen("a.txt", "w");

@@ -26,6 +26,12 @@ document.getElementById("aa").addEventListener('click', () => {
     send()
 })
 
+document.getElementById("ip-val").addEventListener('onblur', () => {
+    console.log("eeee")
+    if(document.getElementById('ip-val').value == "") return;
+    storeIp()
+})
+
 let ipps
 function refresh(){ 
 
@@ -37,9 +43,12 @@ function refresh(){
             
             chrome.storage.local.set({"seend": da.seend}, (d) =>{})
             ipps = d.pip;
-            if(ipps)
-                document.getElementById("ip-val").value = ipps; 
-            
+            if(document.getElementById("ip-val").value != ""){
+                chrome.storage.local.set({"pip": document.getElementById("ip-val").value}, (d) =>{})
+            }else{
+                if(ipps)
+                    document.getElementById("ip-val").value = ipps; 
+            }
             chrome.action.setIcon({
                 path: {
                 16: "images.png",
