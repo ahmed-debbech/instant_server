@@ -5,17 +5,37 @@
             #fld-ip {display:inline-block;} 
             #in-msg {
                 width: 350px;
-                
+                border-radius: 15px;;
             }
             #ip-val{
                 width: 30px;
+            }
+            #msg{
+                word-wrap: break-word;
+                color: aliceblue;
             }
             #aa{
                 right: 10px;
                 bottom: 5px;
                 background-color: rgb(27, 119, 27);
+                border: none;
+                color: white;
+                padding: 10px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 10px;
+                margin-top: 10px;
+                border-radius: 5px;
             }
             #msg-back{
+                background-color: rgb(27, 119, 27);
+                padding: 5%;
+                border-radius: 15px;
+            }
+            #back{
+                width: 24px;
+                height: 24px;
                 background-color: rgb(27, 119, 27);
                 padding: 5%;
             }
@@ -23,6 +43,7 @@
         </style>
     </head>
     <body style="background-color: rgb(200, 255, 200);">
+        <div hidden id="boddy">
         <div id="ip"> <h4 >192.168.1.</h4></div>
         <div  id="fld-ip"> <input id="ip-val" type="text"></div>
         <div id="msg-back">
@@ -32,7 +53,10 @@
         <textarea id="in-msg"></textarea>
         <br>
         <button id="aa" >>>></button>
+        </div>
+        <div id="back">
 
+        </div>
 
         <script defer type="text/javascript" src="popup.js"></script>
 

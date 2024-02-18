@@ -1,20 +1,21 @@
 chrome.runtime.onInstalled.addListener(() => {
   console.log('the extension is installed successfully');
+  chrome.storage.local.set({"port": "9880"}, (d) =>{})
 });
+
 setInterval(() => {
   console.log('calling...');
-  chrome.storage.local.get(["pip"], (d) =>{
+  chrome.storage.local.get(["pip", "port"], (d) =>{
     console.log(JSON.stringify(d))
-    fetch("http://192.168.1."+d.pip+":9880")
+    if(!d.pip || !d.port) return;
+    fetch("http://192.168.1."+d.pip+":" + d.port)
     .then((res) => {res.text().then((data) => {
       console.log("successful!")
       
       chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        console.log(tabs)
         if(tabs.length > 0){
           if(data != "nothing"){
             chrome.storage.local.get(["seend"], (dsn) =>{
-              console.log(dsn)
               if(dsn.seend != data){
                 chrome.action.setIcon({
                   path: {
@@ -29,7 +30,14 @@ setInterval(() => {
         }
       });
     })})
-    .catch((err) => {console.log("could not connect to host")})
+    .catch((err) => {
+      let newport = Number(d.port);
+      newport++;
+      if(newport > 9890) newport = "9880"
+      console.log("could not connect to host.. changing port to" + newport)
+      chrome.storage.local.set({"port": newport}, (d) =>{})
+
+    })
   })
 }, 1000);
 

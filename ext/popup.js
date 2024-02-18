@@ -1,13 +1,16 @@
 function send(){
     let v = document.getElementById("in-msg").value;
-    if(v == "") return;
-    alert(v)
-    chrome.storage.local.get(["pip"], async (d) =>{
-        await fetch("http://192.168.1."+d.pip+":9880", {
+    let b = document.getElementById("ip-val").value;
+
+    if(v == "" || b == "") return;
+    chrome.storage.local.get(["pip", "port"], async (d) =>{
+        await fetch("http://192.168.1."+d.pip+":"+d.port, {
             method: "POST",
             body: v,
         });
-        document.getElementById("msg").value = v;
+        document.getElementById("msg").innerText = v;
+        document.getElementById("in-msg").value=""
+        chrome.storage.local.set({"seend": v}, (d) =>{})
     })
 }
 
@@ -18,21 +21,25 @@ function storeIp(){
 }
 
 document.getElementById("aa").addEventListener('click', () => {
+    if(document.getElementById('ip-val').value == "" || document.getElementById('in-msg').value == "") return;
     storeIp()
     send()
 })
 
 let ipps
 function refresh(){ 
-    storeIp()
 
     chrome.storage.local.get(["pip"], (d) =>{
 
         chrome.storage.local.get((["seend"]), (da) =>{
-            document.getElementById("msg").value = da.seend
+            if(da.seend)
+                document.getElementById("msg").innerText = da.seend
+            
             chrome.storage.local.set({"seend": da.seend}, (d) =>{})
             ipps = d.pip;
-            document.getElementById("ip-val").value = ipps; 
+            if(ipps)
+                document.getElementById("ip-val").value = ipps; 
+            
             chrome.action.setIcon({
                 path: {
                 16: "images.png",
@@ -42,6 +49,15 @@ function refresh(){
         });
     })
 }
+
+function unlock(){
+    document.getElementById("boddy").hidden = false;
+    document.getElementById("back").hidden = true;
+}
+
 document.getElementById("in-msg").addEventListener('click', () => {
     refresh()
+})
+document.getElementById("back").addEventListener('click', () => {
+    unlock()
 })
