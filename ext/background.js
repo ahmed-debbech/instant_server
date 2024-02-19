@@ -17,7 +17,7 @@ setInterval(() => {
           if(data != "nothing"){
             chrome.storage.local.get(["seend"], (dsn) =>{
               console.log(dsn.seend)
-              if(!data.includes(dsn.seend)){
+              if(data != data.seend){
                 chrome.action.setIcon({
                   path: {
                     16: "notif.png",
