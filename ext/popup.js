@@ -4,13 +4,18 @@ function send(){
 
     if(v == "" || b == "") return;
     chrome.storage.local.get(["pip", "port"], async (d) =>{
-        await fetch("http://192.168.1."+d.pip+":"+d.port, {
+        fetch("http://192.168.1."+d.pip+":"+d.port, {
             method: "POST",
             body: v,
-        });
+        })
+        .then((res) => {
         document.getElementById("msg").innerText = v;
         document.getElementById("in-msg").value=""
         chrome.storage.local.set({"seend": v}, (d) =>{})
+        })
+        .catch((err) => {
+            alert("unable")
+        })
     })
 }
 

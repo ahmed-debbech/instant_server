@@ -43,7 +43,7 @@ struct HttpReq http_request_parser(char * buff){
             }
         }
 
-        if((counter != TOP_LINE) && (counter != BODY_START)){ //it is a header
+        /*if((counter != TOP_LINE) && (counter != BODY_START)){ //it is a header
             int s;
             char ** parts = get_token(trimer(tokens[counter]), ':', &s);
             if(s > 1 ){
@@ -70,7 +70,7 @@ struct HttpReq http_request_parser(char * buff){
                 }
                 request.len_header++;
             }
-        }
+        }*/
         
     }
     return request;
@@ -82,10 +82,10 @@ void free_req(struct HttpReq req){
     free(req.path);
     free(req.protocol);
     free(req.body);
-    for(int i=0;i<=req.len_header-1; i++){
+    /*for(int i=0;i<=req.len_header-1; i++){
         free(req.headers[i].key);
         free(req.headers[i].value);
-    }
+    }*/
 }
 char * handle(char * buff){
     struct HttpReq req = http_request_parser(buff);

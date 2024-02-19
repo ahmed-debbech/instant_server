@@ -27,7 +27,8 @@ char * get(){
         return NULL;
     }
     char * s = malloc(sizeof(char) * 1024);
-    fscanf(fptr, "%s", s);
+    //fscanf(fptr, "%s", s);
+    fgets(s, 1024, fptr);
     fclose(fptr);
     return s;
 }
