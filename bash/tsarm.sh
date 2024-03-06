@@ -1,18 +1,19 @@
 #!/bin/bash
 
-echo "hello"
+echo "===TSARM==="
 
 if [ -z "$1" ]; then
     #no param
-    echo "Reading message...";
+    ./prog
 else
     if [[ "$1" == "-i" ]]; then        
         if [ -n "$2" ]; then
-            echo "setting IP";
+            echo "setting IP... success";
+            ./prog $1 $2
         else
             echo "Server IP missing, please specify the ip"
         fi
     else
-        echo "msg"
+        echo "wrong arguments";
     fi
 fi

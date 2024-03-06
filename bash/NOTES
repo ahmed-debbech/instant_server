@@ -1,0 +1,4 @@
+install:
+sudo apt-get install libcurl4-gnutls-dev  ::   for easy curl
+
+gcc tsarmd.c -o deamon -lcurl   ::   to run
