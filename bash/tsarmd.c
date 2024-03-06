@@ -38,29 +38,39 @@ void send_srv(char * t){
     fclose(file);
 }
 
-int main(int argc, char **argv){
+size_t write_callback(void *contents, size_t size, size_t nmemb, void *userp) {
+    size_t realsize = size * nmemb;
+    printf("%s",(char *)contents);
+    return realsize;
+}
 
-    int PORT = 9880;
+void make_get(){
+    printf("appel");
 
     CURL *curl = curl_easy_init();
     CURLcode res;
     char * response;
+    if (curl) {
+        const char *url = "http://localhost:9880";
+        curl_easy_setopt(curl, CURLOPT_URL, url);
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
+        CURLcode res = curl_easy_perform(curl);
+        if (res != CURLE_OK)
+            fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
 
-    if(curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, "http://example.com");
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, (char *)response);
-        res = curl_easy_perform(curl);
-
-        /* check for errors */ 
-        if(res != CURLE_OK) {
-            fprintf(stderr, "curl_easy_perform() failed: %s\n",
-            curl_easy_strerror(res));
-        }
         curl_easy_cleanup(curl);
-        printf("mememem\n");
-        printf("chunk %s\n", response);
     }
+}
 
+int main(int argc, char **argv){
+
+    int PORT = 9881;
+
+    while(1){
+        make_get();
+        printf("lllll");
+       //sleep(1);
+    }
 
     return 0;
 }
